@@ -88,6 +88,7 @@
 			this.timer2 = new System.Windows.Forms.Timer(this.components);
 			this.ConnectionTimer = new System.Windows.Forms.Timer(this.components);
 			this.MonitorStatusTimer = new System.Windows.Forms.Timer(this.components);
+			this.MonitoringStatusMain = new System.Windows.Forms.Label();
 			this.Serial.SuspendLayout();
 			this.PortSelect.SuspendLayout();
 			this.tabPage2.SuspendLayout();
@@ -108,6 +109,7 @@
 			// 
 			// PortSelect
 			// 
+			this.PortSelect.Controls.Add(this.MonitoringStatusMain);
 			this.PortSelect.Controls.Add(this.Clear_Log);
 			this.PortSelect.Controls.Add(this.Connection1);
 			this.PortSelect.Controls.Add(this.label13);
@@ -147,6 +149,7 @@
 			this.Connection1.Size = new System.Drawing.Size(144, 20);
 			this.Connection1.TabIndex = 10;
 			this.Connection1.Text = "Port: Disconnected";
+			this.Connection1.Click += new System.EventHandler(this.Connection1_Click);
 			// 
 			// label13
 			// 
@@ -638,9 +641,14 @@
 			// 
 			this.ConnectionTimer.Tick += new System.EventHandler(this.ConnectionTimer_Tick);
 			// 
-			// MonitorStatusTimer
+			// MonitoringStatusMain
 			// 
-			this.MonitorStatusTimer.Tick += new System.EventHandler(this.MonitorStatusTimer_Tick);
+			this.MonitoringStatusMain.AutoSize = true;
+			this.MonitoringStatusMain.Location = new System.Drawing.Point(913, 23);
+			this.MonitoringStatusMain.Name = "MonitoringStatusMain";
+			this.MonitoringStatusMain.Size = new System.Drawing.Size(188, 20);
+			this.MonitoringStatusMain.TabIndex = 12;
+			this.MonitoringStatusMain.Text = "Monitoring Status: Offline";
 			// 
 			// Form1
 			// 
@@ -720,6 +728,7 @@
 		private System.Windows.Forms.Button Clear_Log;
 		private System.Windows.Forms.Label MonitoringStatus;
 		private System.Windows.Forms.Timer MonitorStatusTimer;
+		private System.Windows.Forms.Label MonitoringStatusMain;
 	}
 }
 

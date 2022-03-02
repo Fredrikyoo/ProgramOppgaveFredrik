@@ -30,7 +30,7 @@ namespace ProgramOppgaveFredrik
 			timer.Tick += new EventHandler(timer_Tick);
 			timer2.Interval = 5000;
 			timer2.Tick += new EventHandler(timer2_Tick);
-			ConnectionTimer.Interval = 2000;
+			ConnectionTimer.Interval = 5000;
 			ConnectionTimer.Tick += new EventHandler(ConnectionTimer_Tick);
 		}
 
@@ -71,22 +71,27 @@ namespace ProgramOppgaveFredrik
 					if (status == 0)
 					{
 						MonitoringStatus.Text = "Monitoring status: ok";
+						MonitoringStatusMain.Text = "Monitoring status: ok";
 					}
 					else if (status == 1)
 					{
 						MonitoringStatus.Text = "Monitoring status: fail";
+						MonitoringStatusMain.Text = "Monitoring status: fail";
 					}
 					else if (status == 2)
 					{
 						MonitoringStatus.Text = "Monitoring status: alarmL";
+						MonitoringStatusMain.Text = "Monitoring status: alarmL";
 					}
 					else if (status == 3)
 					{
 						MonitoringStatus.Text = "Monitoring status: alarmH";
+						MonitoringStatusMain.Text = "Monitoring status: alarmH";
 					}
 					else
 					{
 						MonitoringStatus.Text = "Monitoring status: Offline";
+						MonitoringStatusMain.Text = "Monitoring status: Offline";
 					}
 				}
 			}
@@ -206,6 +211,11 @@ namespace ProgramOppgaveFredrik
 			serialPort1.Close();//stenger serialporten
 			System.Windows.Forms.MessageBox.Show("Porten er nå stengt");
 			ConnectionTimer.Stop();//stopper testingen av koblingstilstanden intill videre
+			MonitoringStatus.Text = "Monitoring status: Offline";
+			MonitoringStatusMain.Text = "Monitoring status: Offline";
+			Connection1.Text = "Port: Disconnected";
+			Connection1.Text = "Port: Disconnected";
+			Connection1.Text = "Port: Disconnected";
 		}
 
 		private void password_Click(object sender, EventArgs e)
@@ -365,9 +375,13 @@ namespace ProgramOppgaveFredrik
 				serialPort1.WriteLine("readstatus");
 			}
 			else
-			{
-				ConnectionTimer.Stop();//stopper timeren gir pop_up melding og endrer tilkoblingsstatus
+			{//om seriealport1 blir stengt
+				timer.Stop();
+				timer2.Stop();
+				ConnectionTimer.Stop();//stopper timerene gir pop_up melding
 				System.Windows.Forms.MessageBox.Show("Disconected from Port");
+				MonitoringStatus.Text = "Monitoring status: Offline";//endrer tilkoblingsstatus
+				MonitoringStatusMain.Text = "Monitoring status: Offline";
 				Connection1.Text = "Port: Disconnected";
 				Connection1.Text = "Port: Disconnected";
 				Connection1.Text = "Port: Disconnected";
@@ -377,6 +391,11 @@ namespace ProgramOppgaveFredrik
 		private void Clear_Log_Click(object sender, EventArgs e)
 		{
 			textBoxResult.Text = "";
+		}
+
+		private void Connection1_Click(object sender, EventArgs e)
+		{
+
 		}
 	}
 }
