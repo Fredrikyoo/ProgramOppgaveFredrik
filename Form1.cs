@@ -32,8 +32,6 @@ namespace ProgramOppgaveFredrik
 			timer2.Tick += new EventHandler(timer2_Tick);
 			ConnectionTimer.Interval = 2000;
 			ConnectionTimer.Tick += new EventHandler(ConnectionTimer_Tick);
-			MonitorStatusTimer.Interval = 5000;
-			MonitorStatusTimer.Tick += new EventHandler(MonitorStatusTimer_Tick);
 		}
 
 		private void buttonConnect_Click(object sender, EventArgs e)
@@ -61,7 +59,8 @@ namespace ProgramOppgaveFredrik
 		}
 		void DataRecivedHandeler(object sender, SerialDataReceivedEventArgs e)
 		{
-			string RecivedData = ((SerialPort)sender).ReadLine(); //leser det motatt fra serielport
+			string RecivedData = "";
+			RecivedData = ((SerialPort)sender).ReadLine(); //leser det motatt fra serielport
 			string[] seperateParts = RecivedData.Split(';'); //splitter det opp i deler
 
 			int status;
@@ -108,8 +107,8 @@ namespace ProgramOppgaveFredrik
 
 			int passord;//lager en numerisk verdi for passord
 			textBoxResult.Invoke((MethodInvoker)delegate
-			{//ser om det er en jevlig statusoppdatering
-				if (seperateParts[0] == "readstatus" && MonitorStatusTimer.Enabled){}
+			{//ser om det er en statusoppdatering
+				if (seperateParts[0] == "readstatus"){}
 				else if(seperateParts[0] == "readraw" && timer.Enabled) { }
 				else if(seperateParts[0] == "readscaled" && timer2.Enabled) { }
 				else
@@ -127,7 +126,7 @@ namespace ProgramOppgaveFredrik
 						}
 						if (passord == 1)//riktig passord gjør at du kan endre på konfigurasjonen
 						{
-							System.Windows.Forms.MessageBox.Show("du kan nå endre configverdiene under fanen Config change ");
+							System.Windows.Forms.MessageBox.Show("du kan endre configurasjons verdiene nå");
 							ConfigName.ReadOnly = false;
 							ConfigLrv.ReadOnly = false;
 							ConfigUrv.ReadOnly = false;
@@ -149,7 +148,6 @@ namespace ProgramOppgaveFredrik
 			{
 				serialPort1.WriteLine(textBoxSend.Text);//sender det som er skrevet i tekstboksen til serialport
 				textBoxResult.AppendText("sendt " + textBoxSend.Text + "\r\n");
-				textBoxSend = null;
 			}
 			else
 			{
@@ -160,25 +158,18 @@ namespace ProgramOppgaveFredrik
 		private void Read_config_click(object sender, EventArgs e)
 		{
 			ConfigBoxSplit.Text = "";//sletter tideligere verdier
-			if (serialPort1.IsOpen)
+			ConfigBoxSplit.AppendText("recived readconf: \r\n");
+			string[] AdjustedConfigs = {ConfigName.Text, ConfigLrv.Text, ConfigUrv.Text, ConfigAlarmL.Text, ConfigAlarmH.Text };
+			string[] OriginalConfigs = { "C385IT001", "0.0", "500.0", "40", "440" };
+			for (int i = 0; i < OriginalConfigs.Length; i++)
 			{
-				serialPort1.WriteLine("readconf");//sender readconf til serialport
-			}
-			else
-			{
-				ConfigBoxSplit.AppendText("recived readconf: \r\n");
-				string[] AdjustedConfigs = {ConfigName.Text, ConfigLrv.Text, ConfigUrv.Text, ConfigAlarmL.Text, ConfigAlarmH.Text };
-				string[] OriginalConfigs = { "C385IT001", "0.0", "500.0", "40", "440" };
-				for (int i = 0; i < OriginalConfigs.Length; i++)
+				if (AdjustedConfigs[i] == "")//om de redigerte verdiene er tomme legger vi til standarverdiene
 				{
-					if (AdjustedConfigs[i] == "")//om de redigerte verdiene er tomme legger vi til standarverdiene
-					{
-						ConfigBoxSplit.AppendText(OriginalConfigs[i] + " \r\n");
-					}
-					else//ellers legger vi til de redigerte verdiene
-					{
-						ConfigBoxSplit.AppendText(AdjustedConfigs[i] + " \r\n");
-					}
+					ConfigBoxSplit.AppendText(OriginalConfigs[i] + " \r\n");
+				}
+				else//ellers legger vi til de redigerte verdiene
+				{
+					ConfigBoxSplit.AppendText(AdjustedConfigs[i] + " \r\n");
 				}
 			}
 		}
@@ -193,14 +184,14 @@ namespace ProgramOppgaveFredrik
 			{
 				if (ConfigBoxSplit.Text == "")//sjekker om det er verdier i configboksen
 				{
-					System.Windows.Forms.MessageBox.Show("Du burde laste til verdier i configboksen");
+					System.Windows.Forms.MessageBox.Show("Det må være målte verdier i tekstboksen");
 				}
 				else
 				{//lager ny fil med det som står i configurasjons boksen
 					StreamWriter outputfile = new StreamWriter(@"C:\tmp\"+ saveText.Text+".ssc");
 					outputfile.WriteLine(ConfigBoxSplit.Text);
 					outputfile.Close();
-					System.Windows.Forms.MessageBox.Show("Fil lagret i mappen tmp");
+					System.Windows.Forms.MessageBox.Show("Filen er lagret i mappen tmp");
 				}
 			}
 		}
@@ -286,7 +277,7 @@ namespace ProgramOppgaveFredrik
 			{
 				if(textBoxCVS.Text.Length == 0)
 				{
-					System.Windows.Forms.MessageBox.Show("trykk på start reading");
+					System.Windows.Forms.MessageBox.Show("du må starte en reading");
 				}
 				else
 				{
@@ -371,6 +362,7 @@ namespace ProgramOppgaveFredrik
 				Connection1.Text = "Port: Conneted";
 				Connection2.Text = "Port: Conneted";
 				Connection3.Text = "Port: Conneted";
+				serialPort1.WriteLine("readstatus");
 			}
 			else
 			{
@@ -385,16 +377,6 @@ namespace ProgramOppgaveFredrik
 		private void Clear_Log_Click(object sender, EventArgs e)
 		{
 			textBoxResult.Text = "";
-		}
-
-		private void readStatus_click(object sender, EventArgs e)
-		{
-			MonitorStatusTimer.Start();
-		}
-
-		private void MonitorStatusTimer_Tick(object sender, EventArgs e)
-		{
-			serialPort1.WriteLine("readstatus");
 		}
 	}
 }

@@ -29,9 +29,9 @@
 		private void InitializeComponent()
 		{
 			this.components = new System.ComponentModel.Container();
-			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-			System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-			System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+			System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+			System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+			System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			this.Serial = new System.Windows.Forms.TabControl();
 			this.PortSelect = new System.Windows.Forms.TabPage();
 			this.Clear_Log = new System.Windows.Forms.Button();
@@ -73,7 +73,6 @@
 			this.ConfigName = new System.Windows.Forms.TextBox();
 			this.monitor = new System.Windows.Forms.TabPage();
 			this.MonitoringStatus = new System.Windows.Forms.Label();
-			this.StatusRead = new System.Windows.Forms.Button();
 			this.Connection3 = new System.Windows.Forms.Label();
 			this.startTimerScaled = new System.Windows.Forms.Button();
 			this.label12 = new System.Windows.Forms.Label();
@@ -143,11 +142,11 @@
 			// Connection1
 			// 
 			this.Connection1.AutoSize = true;
-			this.Connection1.Location = new System.Drawing.Point(966, 3);
+			this.Connection1.Location = new System.Drawing.Point(957, 3);
 			this.Connection1.Name = "Connection1";
-			this.Connection1.Size = new System.Drawing.Size(135, 20);
+			this.Connection1.Size = new System.Drawing.Size(144, 20);
 			this.Connection1.TabIndex = 10;
-			this.Connection1.Text = "Port: Disconected";
+			this.Connection1.Text = "Port: Disconnected";
 			// 
 			// label13
 			// 
@@ -279,11 +278,11 @@
 			// Connection2
 			// 
 			this.Connection2.AutoSize = true;
-			this.Connection2.Location = new System.Drawing.Point(966, 3);
+			this.Connection2.Location = new System.Drawing.Point(957, 3);
 			this.Connection2.Name = "Connection2";
-			this.Connection2.Size = new System.Drawing.Size(135, 20);
+			this.Connection2.Size = new System.Drawing.Size(144, 20);
 			this.Connection2.TabIndex = 26;
-			this.Connection2.Text = "Port: Disconected";
+			this.Connection2.Text = "Port: Disconnected";
 			// 
 			// config_clear
 			// 
@@ -494,7 +493,6 @@
 			// monitor
 			// 
 			this.monitor.Controls.Add(this.MonitoringStatus);
-			this.monitor.Controls.Add(this.StatusRead);
 			this.monitor.Controls.Add(this.Connection3);
 			this.monitor.Controls.Add(this.startTimerScaled);
 			this.monitor.Controls.Add(this.label12);
@@ -522,25 +520,14 @@
 			this.MonitoringStatus.TabIndex = 11;
 			this.MonitoringStatus.Text = "Monitoring Status: Offline";
 			// 
-			// StatusRead
-			// 
-			this.StatusRead.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.StatusRead.Location = new System.Drawing.Point(350, 427);
-			this.StatusRead.Name = "StatusRead";
-			this.StatusRead.Size = new System.Drawing.Size(135, 40);
-			this.StatusRead.TabIndex = 10;
-			this.StatusRead.Text = "Status read";
-			this.StatusRead.UseVisualStyleBackColor = true;
-			this.StatusRead.Click += new System.EventHandler(this.readStatus_click);
-			// 
 			// Connection3
 			// 
 			this.Connection3.AutoSize = true;
-			this.Connection3.Location = new System.Drawing.Point(966, 3);
+			this.Connection3.Location = new System.Drawing.Point(957, 3);
 			this.Connection3.Name = "Connection3";
-			this.Connection3.Size = new System.Drawing.Size(135, 20);
+			this.Connection3.Size = new System.Drawing.Size(144, 20);
 			this.Connection3.TabIndex = 9;
-			this.Connection3.Text = "Port: Disconected";
+			this.Connection3.Text = "Port: Disconnected";
 			// 
 			// startTimerScaled
 			// 
@@ -624,17 +611,17 @@
 			// 
 			// chart
 			// 
-			chartArea3.Name = "ChartArea1";
-			this.chart.ChartAreas.Add(chartArea3);
-			legend3.Name = "Legend1";
-			this.chart.Legends.Add(legend3);
+			chartArea1.Name = "ChartArea1";
+			this.chart.ChartAreas.Add(chartArea1);
+			legend1.Name = "Legend1";
+			this.chart.Legends.Add(legend1);
 			this.chart.Location = new System.Drawing.Point(87, 90);
 			this.chart.Name = "chart";
-			series3.ChartArea = "ChartArea1";
-			series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-			series3.Legend = "Legend1";
-			series3.Name = "Vba";
-			this.chart.Series.Add(series3);
+			series1.ChartArea = "ChartArea1";
+			series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+			series1.Legend = "Legend1";
+			series1.Name = "Vba";
+			this.chart.Series.Add(series1);
 			this.chart.Size = new System.Drawing.Size(398, 284);
 			this.chart.TabIndex = 0;
 			this.chart.Text = "chart";
@@ -731,7 +718,6 @@
 		private System.Windows.Forms.Label Connection2;
 		private System.Windows.Forms.Timer ConnectionTimer;
 		private System.Windows.Forms.Button Clear_Log;
-		private System.Windows.Forms.Button StatusRead;
 		private System.Windows.Forms.Label MonitoringStatus;
 		private System.Windows.Forms.Timer MonitorStatusTimer;
 	}
