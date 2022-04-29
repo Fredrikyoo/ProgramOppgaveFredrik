@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
+using System.Configuration;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using System.IO.Ports;
-using System.Windows.Forms.DataVisualization.Charting;
+using System.Data.SqlClient;
 using System.IO;
+using System.IO.Ports;
+using System.Windows.Forms;
 
 namespace ProgramOppgaveFredrik
 {
@@ -17,6 +13,10 @@ namespace ProgramOppgaveFredrik
 	{
 		List<float> analogReading = new List<float>();
 		List<DateTime> timestamp = new List<DateTime>();
+		string DataBase = ConfigurationManager.ConnectionStrings["DataBase"].ConnectionString;
+		readonly DataTable dt = new DataTable();
+		DataRow dr;
+
 		public Form1()
 		{
 			InitializeComponent();
@@ -32,6 +32,35 @@ namespace ProgramOppgaveFredrik
 			timer2.Tick += new EventHandler(timer2_Tick);
 			ConnectionTimer.Interval = 5000;
 			ConnectionTimer.Tick += new EventHandler(ConnectionTimer_Tick);
+			dt.Columns.Add("Tag");
+			dt.Columns.Add("InstrumentType");
+			dt.Columns.Add("AreaCode");
+			dt.Columns.Add("DAU_id");
+			dt.Columns.Add("Manufacturer_id");
+			dt.Columns.Add("LRV");
+			dt.Columns.Add("URV");
+			dt.Columns.Add("AlarmL");
+			dt.Columns.Add("AlarmH");
+		}
+
+		void ViewSqlResultInDataGridView(string sqlQuery)
+		{
+			try
+			{
+				SqlConnection con = new SqlConnection(DataBase);
+				SqlDataAdapter sda;
+				DataTable dt;
+				con.Open();
+				sda = new SqlDataAdapter(sqlQuery, con);
+				dt = new DataTable();
+				sda.Fill(dt);
+				dataGridView1.DataSource = dt;
+				con.Close();
+			}
+			catch (Exception error)
+			{
+				MessageBox.Show(error.Message);
+			}
 		}
 
 		private void buttonConnect_Click(object sender, EventArgs e)
@@ -40,14 +69,14 @@ namespace ProgramOppgaveFredrik
 			{
 				serialPort1.Close();
 				serialPort1.PortName = SerialSelect.Text;
-				while (serialPort1.IsOpen);
+				while (serialPort1.IsOpen) ;
 				serialPort1.Open();
 				System.Windows.Forms.MessageBox.Show("tilkoblet " + SerialSelect.Text);
 				Connection1.Text = "Port: Connected";
 				Connection2.Text = "Port: Connected";
 				Connection3.Text = "Port: Connected";
 				ConnectionTimer.Start();
-			} 
+			}
 			catch (Exception ex) //gir feilmelding om koblingen ikke gikk
 			{
 				serialPort1.Close();
@@ -57,6 +86,7 @@ namespace ProgramOppgaveFredrik
 				}
 			}
 		}
+
 		void DataRecivedHandeler(object sender, SerialDataReceivedEventArgs e)
 		{
 			string RecivedData = "";
@@ -95,7 +125,7 @@ namespace ProgramOppgaveFredrik
 					}
 				}
 			}
-		
+
 
 			float iVab;
 			if (seperateParts[0] == "readraw" || seperateParts[0] == "readscaled") //hvis vi motar readraw eller readscaled
@@ -113,21 +143,21 @@ namespace ProgramOppgaveFredrik
 			int passord;//lager en numerisk verdi for passord
 			textBoxResult.Invoke((MethodInvoker)delegate
 			{//ser om det er en statusoppdatering
-				if (seperateParts[0] == "readstatus"){}
-				else if(seperateParts[0] == "readraw" && timer.Enabled) { }
-				else if(seperateParts[0] == "readscaled" && timer2.Enabled) { }
+				if (seperateParts[0] == "readstatus") { }
+				else if (seperateParts[0] == "readraw" && timer.Enabled) { }
+				else if (seperateParts[0] == "readscaled" && timer2.Enabled) { }
 				else
 				{//hvis det ikke er det legges data'en til i resultboksen 
-					textBoxResult.AppendText("recived " + RecivedData + "\r\n"); 
+					textBoxResult.AppendText("recived " + RecivedData + "\r\n");
 				}
 
 				if (seperateParts[0] == "writeconf") //hvis første motatt verdi er writeconf
-				{						
+				{
 					if (int.TryParse(seperateParts[1], out passord))//blir den andre verdien tilegnet passordet
 					{
 						if (passord == 0)//feil passord
 						{
-							System.Windows.Forms.MessageBox.Show("feil passord");							
+							System.Windows.Forms.MessageBox.Show("feil passord");
 						}
 						if (passord == 1)//riktig passord gjør at du kan endre på konfigurasjonen
 						{
@@ -160,43 +190,85 @@ namespace ProgramOppgaveFredrik
 			}
 		}
 
-		private void Read_config_click(object sender, EventArgs e)
+		private void Load_config_click(object sender, EventArgs e)
 		{
-			ConfigBoxSplit.Text = "";//sletter tideligere verdier
-			ConfigBoxSplit.AppendText("recived readconf: \r\n");
-			string[] AdjustedConfigs = {ConfigName.Text, ConfigLrv.Text, ConfigUrv.Text, ConfigAlarmL.Text, ConfigAlarmH.Text };
+			dr = dt.NewRow();
+			dr["InstrumentType"] = "PT100";
+			dr["AreaCode"] = 3123.ToString();
+			dr["DAU_id"] = 1.ToString();
+			dr["Manufacturer_id"] = 1.ToString();
+
+			string[] AdjustedConfigs = { ConfigName.Text, ConfigLrv.Text, ConfigUrv.Text, ConfigAlarmL.Text, ConfigAlarmH.Text };
 			string[] OriginalConfigs = { "C385IT001", "0.0", "500.0", "40", "440" };
+			string[] NewConfigs = { "Tag", "LRV", "URV", "AlarmL", "AlarmH" };
+
 			for (int i = 0; i < OriginalConfigs.Length; i++)
 			{
 				if (AdjustedConfigs[i] == "")//om de redigerte verdiene er tomme legger vi til standarverdiene
 				{
-					ConfigBoxSplit.AppendText(OriginalConfigs[i] + " \r\n");
+					dr[NewConfigs[i]] = OriginalConfigs[i];
 				}
 				else//ellers legger vi til de redigerte verdiene
 				{
-					ConfigBoxSplit.AppendText(AdjustedConfigs[i] + " \r\n");
+					dr[NewConfigs[i]] = AdjustedConfigs[i];
 				}
 			}
+			dt.Rows.Add(dr);
+			dataGridView1.DataSource = DataBase;
+
+			string sqlQuery = @"SELECT * FROM Instrument ORDER BY Tag ASC";
+			ViewSqlResultInDataGridView(sqlQuery);
 		}
 
 		private void SaveConf_Click(object sender, EventArgs e)
 		{
-			if(saveText.Text == "")//sjekker om filen får et navn
+			if (saveText.Text == "")//sjekker om filen får et navn
 			{
 				System.Windows.Forms.MessageBox.Show("Gi filen et navn");
 			}
 			else
 			{
-				if (ConfigBoxSplit.Text == "")//sjekker om det er verdier i configboksen
+				//lager ny fil med det som står i configurasjons boksen
+				StreamWriter outputfile = new StreamWriter(@"C:\tmp\" + saveText.Text + ".ssc");
+				outputfile.WriteLine(dataGridView1.Text);
+				outputfile.Close();
+				System.Windows.Forms.MessageBox.Show("Filen er lagret i mappen tmp");
+
+
+				string Tag, InstrumentType, AreaCode, DAU_id, Manufacturer_id, sqlQuery, LRV, URV, AlarmL, AlarmH;
+				try
 				{
-					System.Windows.Forms.MessageBox.Show("Det må være målte verdier i tekstboksen");
+					//Oppretter en connection mot databasen med string definert i App.config:
+					SqlConnection con = new SqlConnection(DataBase);
+					Tag = ConfigName.Text;
+					InstrumentType = "PT100";
+					AreaCode = 3123.ToString();
+					DAU_id = 1.ToString();
+					Manufacturer_id = 1.ToString();
+					URV = "500.0";
+					AlarmL = "40";
+					AlarmH = "440";
+					string[] AdjustedConfigs = { ConfigName.Text, ConfigLrv.Text, ConfigUrv.Text, ConfigAlarmL.Text, ConfigAlarmH.Text };
+
+					if (AdjustedConfigs[1] == "") { LRV = "0.0"; }
+					else { LRV = AdjustedConfigs[1]; }
+					if (AdjustedConfigs[2] == "") { URV = "500.0"; }
+					else { LRV = AdjustedConfigs[2]; }
+					if (AdjustedConfigs[3] == "") { AlarmL = "40"; }
+					else { LRV = AdjustedConfigs[3]; }
+					if (AdjustedConfigs[4] == "") { AlarmH = "440"; }
+					else { LRV = AdjustedConfigs[4]; }
+
+					sqlQuery = String.Concat(@"INSERT INTO Instrument ([Tag], [InstrumentType], [AreaCode], [DAU_id], [Manufacturer_id], [LRV], [URV], [AlarmL], [AlarmH])
+						VALUES ('" + Tag + "','" + InstrumentType + "','" + AreaCode + "','" + DAU_id + "','" + Manufacturer_id + "','" + LRV + "','" + URV + "','" + AlarmL + "','" + AlarmH + "')");
+					con.Open();
+					SqlCommand command = new SqlCommand(sqlQuery, con);
+					command.ExecuteNonQuery();
+					con.Close();
 				}
-				else
-				{//lager ny fil med det som står i configurasjons boksen
-					StreamWriter outputfile = new StreamWriter(@"C:\tmp\"+ saveText.Text+".ssc");
-					outputfile.WriteLine(ConfigBoxSplit.Text);
-					outputfile.Close();
-					System.Windows.Forms.MessageBox.Show("Filen er lagret i mappen tmp");
+				catch (Exception error)
+				{
+					MessageBox.Show(error.Message);
 				}
 			}
 		}
@@ -220,7 +292,7 @@ namespace ProgramOppgaveFredrik
 
 		private void password_Click(object sender, EventArgs e)
 		{
-			if(PasswordBox.Text == "password")//om passordet i passordboksen er riktig
+			if (PasswordBox.Text == "password")//om passordet i passordboksen er riktig
 			{
 				ConfigName.ReadOnly = false;//redigeringsboksene åpnes for redigering
 				ConfigLrv.ReadOnly = false;
@@ -228,11 +300,12 @@ namespace ProgramOppgaveFredrik
 				ConfigAlarmL.ReadOnly = false;
 				ConfigAlarmH.ReadOnly = false;
 				System.Windows.Forms.MessageBox.Show("login sucsess");
+				PasswordBox.Text = "";
 
 			}
-			else if(PasswordBox.Text.Length == 0)
+			else if (PasswordBox.Text.Length == 0)
 			{
-				System.Windows.Forms.MessageBox.Show("Du må skrive inn passordet"); 
+				System.Windows.Forms.MessageBox.Show("Du må skrive inn passordet");
 			}
 			else
 			{
@@ -283,27 +356,67 @@ namespace ProgramOppgaveFredrik
 			{
 				System.Windows.Forms.MessageBox.Show("Gi filen et navn før du lagrer");
 			}
-			else 
+			else
 			{
-				if(textBoxCVS.Text.Length == 0)
+				if (textBoxCVS.Text.Length == 0)
 				{
 					System.Windows.Forms.MessageBox.Show("du må starte en reading");
 				}
 				else
 				{
+					string Tag, Reading_Type, sqlQuery;
+					SqlConnection con = new SqlConnection(DataBase);
+					Tag = ConfigName.Text;
+					int Status;
+					var Time = new List<string>();
+					var Val = new List<string>();
+					int z = 0;
+
+
+					string[] stat = MonitoringStatus.Text.Split(':');
+					if (stat[1] == " ok") { Status = 0; } 
+					else if (stat[1] == " AlarmH") { Status = 3; } 
+					else if (stat[1] == " AlarmL") { Status = 2; } 
+					else { Status = 1; }
+					
+
 					System.Windows.Forms.MessageBox.Show("Lagret filen " + readingNameBox.Text + ".csv");
 					StreamWriter recordfile = new StreamWriter(@"C:\tmp\" + readingNameBox.Text + ".csv");//lager ny fil med egetdefinert navn
 					char[] splits = new char[] { ';', ',' };
 					string[] readValues = textBoxCVS.Text.Split(splits);//splitter opp teksten i fra målingboksen
 					recordfile.WriteLine(readValues[0]);//skriver opp om det er scaled eller raw og statusen o filen
-					recordfile.WriteLine(readValues[1]+": ,"+readValues[3]+":");//colonne for tid og colonne for verdi
+					recordfile.WriteLine(readValues[1] + ": ," + readValues[3] + ":");//colonne for tid og colonne for verdi
+					if(readValues[0] == "Reading scaled")
+					{
+						Reading_Type = "Scaled";
+					} else
+					{
+						Reading_Type = "Raw";
+					}
+
 					for (int i = 4; i < readValues.Length;)
 					{//sriver ut tiden og Mplingverdiene nedover
 						int y = i - 2;
-						recordfile.WriteLine(readValues[y]+","+readValues[i]);
+						z = z + 1;
+						recordfile.WriteLine(readValues[y] + "," + readValues[i]);
+						Time.Add(readValues[y]);
+						Val.Add(readValues[i]);
 						i = i + 4;
 					}
 					recordfile.Close();
+
+
+					for (int a = 0; a < z;)
+					{
+						sqlQuery = String.Concat(@"INSERT INTO Datalog ([Tag], [Status], [Reading_Type], [Timestamp], [Value])
+						VALUES ('" + Tag + "','" + Status + "','" + Reading_Type + "','" + Time[a] + "','" + Val[a] + "')");
+						con.Open();
+						SqlCommand command = new SqlCommand(sqlQuery, con);
+						command.ExecuteNonQuery();
+						con.Close();
+						a = a + 1;
+					}
+
 				}
 			}
 		}
@@ -311,34 +424,6 @@ namespace ProgramOppgaveFredrik
 		private void clearReading_Click(object sender, EventArgs e)
 		{
 			textBoxCVS.Text = "";//fjerner tekst fra reading
-		}
-
-		private void UplaodButton_click(object sender, EventArgs e)
-		{
-			ConfigBoxSplit.Text = "File uploaded: "+UploadBox.Text;
-			StreamReader inputfile = new StreamReader(@"C:\tmp\" + UploadBox.Text + ".ssc");//finner ønsket fil "inputfil"
-			string inputread = inputfile.ReadToEnd();
-			string[] seperateRead = inputread.Split(' ');//splitter filen opp
-			ConfigName.Text = seperateRead[2];//setter verdiene i redigeringsboksen
-			ConfigLrv.Text = seperateRead[3];
-			ConfigUrv.Text = seperateRead[4];
-			ConfigAlarmL.Text = seperateRead[5];
-			ConfigAlarmH.Text = seperateRead[6];
-			for(int i = 2;i < seperateRead.Length; i++)//leger verdiene til i configurasjonsboksen
-			{
-				ConfigBoxSplit.AppendText(seperateRead[i]);
-			}
-			inputfile.Close();
-		}
-
-		private void config_clear_Click(object sender, EventArgs e)
-		{
-			ConfigBoxSplit.Text = "";//fjerner tekst
-			ConfigName.Text = "";
-			ConfigLrv.Text = "";
-			ConfigUrv.Text = "";
-			ConfigAlarmL.Text = "";
-			ConfigAlarmH.Text = "";
 		}
 
 		private void startTimerScaled_Click(object sender, EventArgs e)
@@ -394,6 +479,11 @@ namespace ProgramOppgaveFredrik
 		}
 
 		private void Connection1_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void MonitoringStatus_Click(object sender, EventArgs e)
 		{
 
 		}

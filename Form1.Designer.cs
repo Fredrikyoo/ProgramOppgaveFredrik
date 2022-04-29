@@ -34,6 +34,7 @@
 			System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
 			this.Serial = new System.Windows.Forms.TabControl();
 			this.PortSelect = new System.Windows.Forms.TabPage();
+			this.MonitoringStatusMain = new System.Windows.Forms.Label();
 			this.Clear_Log = new System.Windows.Forms.Button();
 			this.Connection1 = new System.Windows.Forms.Label();
 			this.label13 = new System.Windows.Forms.Label();
@@ -47,13 +48,10 @@
 			this.SerialSelect = new System.Windows.Forms.ComboBox();
 			this.buttonConnect = new System.Windows.Forms.Button();
 			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.Connection2 = new System.Windows.Forms.Label();
-			this.config_clear = new System.Windows.Forms.Button();
-			this.UploadBox = new System.Windows.Forms.TextBox();
 			this.label5 = new System.Windows.Forms.Label();
 			this.saveText = new System.Windows.Forms.TextBox();
-			this.label11 = new System.Windows.Forms.Label();
-			this.Upload_Button = new System.Windows.Forms.Button();
 			this.buttonLogin = new System.Windows.Forms.Button();
 			this.label10 = new System.Windows.Forms.Label();
 			this.PasswordBox = new System.Windows.Forms.TextBox();
@@ -66,7 +64,6 @@
 			this.ConfigAlarmH = new System.Windows.Forms.TextBox();
 			this.SaveConf = new System.Windows.Forms.Button();
 			this.LoadConf = new System.Windows.Forms.Button();
-			this.ConfigBoxSplit = new System.Windows.Forms.TextBox();
 			this.ConfigAlarmL = new System.Windows.Forms.TextBox();
 			this.ConfigUrv = new System.Windows.Forms.TextBox();
 			this.ConfigLrv = new System.Windows.Forms.TextBox();
@@ -88,10 +85,10 @@
 			this.timer2 = new System.Windows.Forms.Timer(this.components);
 			this.ConnectionTimer = new System.Windows.Forms.Timer(this.components);
 			this.MonitorStatusTimer = new System.Windows.Forms.Timer(this.components);
-			this.MonitoringStatusMain = new System.Windows.Forms.Label();
 			this.Serial.SuspendLayout();
 			this.PortSelect.SuspendLayout();
 			this.tabPage2.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.monitor.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chart)).BeginInit();
 			this.SuspendLayout();
@@ -129,6 +126,15 @@
 			this.PortSelect.TabIndex = 0;
 			this.PortSelect.Text = "Main";
 			this.PortSelect.UseVisualStyleBackColor = true;
+			// 
+			// MonitoringStatusMain
+			// 
+			this.MonitoringStatusMain.AutoSize = true;
+			this.MonitoringStatusMain.Location = new System.Drawing.Point(913, 23);
+			this.MonitoringStatusMain.Name = "MonitoringStatusMain";
+			this.MonitoringStatusMain.Size = new System.Drawing.Size(188, 20);
+			this.MonitoringStatusMain.TabIndex = 12;
+			this.MonitoringStatusMain.Text = "Monitoring Status: Offline";
 			// 
 			// Clear_Log
 			// 
@@ -245,13 +251,10 @@
 			// 
 			// tabPage2
 			// 
+			this.tabPage2.Controls.Add(this.dataGridView1);
 			this.tabPage2.Controls.Add(this.Connection2);
-			this.tabPage2.Controls.Add(this.config_clear);
-			this.tabPage2.Controls.Add(this.UploadBox);
 			this.tabPage2.Controls.Add(this.label5);
 			this.tabPage2.Controls.Add(this.saveText);
-			this.tabPage2.Controls.Add(this.label11);
-			this.tabPage2.Controls.Add(this.Upload_Button);
 			this.tabPage2.Controls.Add(this.buttonLogin);
 			this.tabPage2.Controls.Add(this.label10);
 			this.tabPage2.Controls.Add(this.PasswordBox);
@@ -264,7 +267,6 @@
 			this.tabPage2.Controls.Add(this.ConfigAlarmH);
 			this.tabPage2.Controls.Add(this.SaveConf);
 			this.tabPage2.Controls.Add(this.LoadConf);
-			this.tabPage2.Controls.Add(this.ConfigBoxSplit);
 			this.tabPage2.Controls.Add(this.ConfigAlarmL);
 			this.tabPage2.Controls.Add(this.ConfigUrv);
 			this.tabPage2.Controls.Add(this.ConfigLrv);
@@ -278,6 +280,17 @@
 			this.tabPage2.UseVisualStyleBackColor = true;
 			this.tabPage2.Click += new System.EventHandler(this.tabPage2_Click);
 			// 
+			// dataGridView1
+			// 
+			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+			this.dataGridView1.Location = new System.Drawing.Point(302, 55);
+			this.dataGridView1.Name = "dataGridView1";
+			this.dataGridView1.ReadOnly = true;
+			this.dataGridView1.RowHeadersWidth = 62;
+			this.dataGridView1.RowTemplate.Height = 28;
+			this.dataGridView1.Size = new System.Drawing.Size(774, 332);
+			this.dataGridView1.TabIndex = 27;
+			// 
 			// Connection2
 			// 
 			this.Connection2.AutoSize = true;
@@ -287,28 +300,10 @@
 			this.Connection2.TabIndex = 26;
 			this.Connection2.Text = "Port: Disconnected";
 			// 
-			// config_clear
-			// 
-			this.config_clear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.config_clear.Location = new System.Drawing.Point(343, 367);
-			this.config_clear.Name = "config_clear";
-			this.config_clear.Size = new System.Drawing.Size(172, 41);
-			this.config_clear.TabIndex = 25;
-			this.config_clear.Text = "Clear configuration";
-			this.config_clear.UseVisualStyleBackColor = true;
-			this.config_clear.Click += new System.EventHandler(this.config_clear_Click);
-			// 
-			// UploadBox
-			// 
-			this.UploadBox.Location = new System.Drawing.Point(884, 330);
-			this.UploadBox.Name = "UploadBox";
-			this.UploadBox.Size = new System.Drawing.Size(172, 26);
-			this.UploadBox.TabIndex = 24;
-			// 
 			// label5
 			// 
 			this.label5.AutoSize = true;
-			this.label5.Location = new System.Drawing.Point(790, 203);
+			this.label5.Location = new System.Drawing.Point(724, 416);
 			this.label5.Name = "label5";
 			this.label5.Size = new System.Drawing.Size(89, 20);
 			this.label5.TabIndex = 23;
@@ -316,35 +311,15 @@
 			// 
 			// saveText
 			// 
-			this.saveText.Location = new System.Drawing.Point(884, 200);
+			this.saveText.Location = new System.Drawing.Point(818, 413);
 			this.saveText.Name = "saveText";
 			this.saveText.Size = new System.Drawing.Size(172, 26);
 			this.saveText.TabIndex = 22;
 			// 
-			// label11
-			// 
-			this.label11.AutoSize = true;
-			this.label11.Location = new System.Drawing.Point(790, 330);
-			this.label11.Name = "label11";
-			this.label11.Size = new System.Drawing.Size(88, 20);
-			this.label11.TabIndex = 21;
-			this.label11.Text = "Upload file:";
-			// 
-			// Upload_Button
-			// 
-			this.Upload_Button.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.Upload_Button.Location = new System.Drawing.Point(884, 361);
-			this.Upload_Button.Name = "Upload_Button";
-			this.Upload_Button.Size = new System.Drawing.Size(172, 41);
-			this.Upload_Button.TabIndex = 19;
-			this.Upload_Button.Text = "Upload local file";
-			this.Upload_Button.UseVisualStyleBackColor = true;
-			this.Upload_Button.Click += new System.EventHandler(this.UplaodButton_click);
-			// 
 			// buttonLogin
 			// 
 			this.buttonLogin.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.buttonLogin.Location = new System.Drawing.Point(884, 102);
+			this.buttonLogin.Location = new System.Drawing.Point(500, 445);
 			this.buttonLogin.Name = "buttonLogin";
 			this.buttonLogin.Size = new System.Drawing.Size(172, 41);
 			this.buttonLogin.TabIndex = 18;
@@ -355,7 +330,7 @@
 			// label10
 			// 
 			this.label10.AutoSize = true;
-			this.label10.Location = new System.Drawing.Point(807, 73);
+			this.label10.Location = new System.Drawing.Point(423, 419);
 			this.label10.Name = "label10";
 			this.label10.Size = new System.Drawing.Size(71, 20);
 			this.label10.TabIndex = 17;
@@ -363,7 +338,7 @@
 			// 
 			// PasswordBox
 			// 
-			this.PasswordBox.Location = new System.Drawing.Point(884, 67);
+			this.PasswordBox.Location = new System.Drawing.Point(500, 413);
 			this.PasswordBox.Name = "PasswordBox";
 			this.PasswordBox.Size = new System.Drawing.Size(172, 26);
 			this.PasswordBox.TabIndex = 16;
@@ -433,7 +408,7 @@
 			// SaveConf
 			// 
 			this.SaveConf.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.SaveConf.Location = new System.Drawing.Point(884, 232);
+			this.SaveConf.Location = new System.Drawing.Point(818, 445);
 			this.SaveConf.Name = "SaveConf";
 			this.SaveConf.Size = new System.Drawing.Size(172, 41);
 			this.SaveConf.TabIndex = 7;
@@ -444,22 +419,13 @@
 			// LoadConf
 			// 
 			this.LoadConf.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.LoadConf.Location = new System.Drawing.Point(577, 367);
+			this.LoadConf.Location = new System.Drawing.Point(60, 445);
 			this.LoadConf.Name = "LoadConf";
 			this.LoadConf.Size = new System.Drawing.Size(172, 41);
 			this.LoadConf.TabIndex = 6;
 			this.LoadConf.Text = "Load configuration";
 			this.LoadConf.UseVisualStyleBackColor = true;
-			this.LoadConf.Click += new System.EventHandler(this.Read_config_click);
-			// 
-			// ConfigBoxSplit
-			// 
-			this.ConfigBoxSplit.Location = new System.Drawing.Point(343, 79);
-			this.ConfigBoxSplit.Multiline = true;
-			this.ConfigBoxSplit.Name = "ConfigBoxSplit";
-			this.ConfigBoxSplit.ReadOnly = true;
-			this.ConfigBoxSplit.Size = new System.Drawing.Size(406, 282);
-			this.ConfigBoxSplit.TabIndex = 5;
+			this.LoadConf.Click += new System.EventHandler(this.Load_config_click);
 			// 
 			// ConfigAlarmL
 			// 
@@ -522,6 +488,7 @@
 			this.MonitoringStatus.Size = new System.Drawing.Size(188, 20);
 			this.MonitoringStatus.TabIndex = 11;
 			this.MonitoringStatus.Text = "Monitoring Status: Offline";
+			this.MonitoringStatus.Click += new System.EventHandler(this.MonitoringStatus_Click);
 			// 
 			// Connection3
 			// 
@@ -641,15 +608,6 @@
 			// 
 			this.ConnectionTimer.Tick += new System.EventHandler(this.ConnectionTimer_Tick);
 			// 
-			// MonitoringStatusMain
-			// 
-			this.MonitoringStatusMain.AutoSize = true;
-			this.MonitoringStatusMain.Location = new System.Drawing.Point(913, 23);
-			this.MonitoringStatusMain.Name = "MonitoringStatusMain";
-			this.MonitoringStatusMain.Size = new System.Drawing.Size(188, 20);
-			this.MonitoringStatusMain.TabIndex = 12;
-			this.MonitoringStatusMain.Text = "Monitoring Status: Offline";
-			// 
 			// Form1
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -663,6 +621,7 @@
 			this.PortSelect.PerformLayout();
 			this.tabPage2.ResumeLayout(false);
 			this.tabPage2.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
 			this.monitor.ResumeLayout(false);
 			this.monitor.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.chart)).EndInit();
@@ -691,7 +650,6 @@
 		private System.Windows.Forms.TextBox ConfigName;
 		private System.Windows.Forms.Button SaveConf;
 		private System.Windows.Forms.Button LoadConf;
-		private System.Windows.Forms.TextBox ConfigBoxSplit;
 		private System.Windows.Forms.TextBox ConfigAlarmH;
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.Label label8;
@@ -710,12 +668,8 @@
 		private System.Windows.Forms.Button cvsSave;
 		private System.Windows.Forms.TextBox textBoxCVS;
 		private System.Windows.Forms.Button clear;
-		private System.Windows.Forms.Button Upload_Button;
-		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.Label label5;
 		private System.Windows.Forms.TextBox saveText;
-		private System.Windows.Forms.TextBox UploadBox;
-		private System.Windows.Forms.Button config_clear;
 		private System.Windows.Forms.TextBox readingNameBox;
 		private System.Windows.Forms.Label label12;
 		private System.Windows.Forms.Label label13;
@@ -729,6 +683,7 @@
 		private System.Windows.Forms.Label MonitoringStatus;
 		private System.Windows.Forms.Timer MonitorStatusTimer;
 		private System.Windows.Forms.Label MonitoringStatusMain;
+		private System.Windows.Forms.DataGridView dataGridView1;
 	}
 }
 
