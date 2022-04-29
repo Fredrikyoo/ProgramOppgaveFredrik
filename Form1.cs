@@ -245,19 +245,16 @@ namespace ProgramOppgaveFredrik
 					AreaCode = 3123.ToString();
 					DAU_id = 1.ToString();
 					Manufacturer_id = 1.ToString();
-					URV = "500.0";
-					AlarmL = "40";
-					AlarmH = "440";
 					string[] AdjustedConfigs = { ConfigName.Text, ConfigLrv.Text, ConfigUrv.Text, ConfigAlarmL.Text, ConfigAlarmH.Text };
 
 					if (AdjustedConfigs[1] == "") { LRV = "0.0"; }
 					else { LRV = AdjustedConfigs[1]; }
 					if (AdjustedConfigs[2] == "") { URV = "500.0"; }
-					else { LRV = AdjustedConfigs[2]; }
+					else { URV = AdjustedConfigs[2]; }
 					if (AdjustedConfigs[3] == "") { AlarmL = "40"; }
-					else { LRV = AdjustedConfigs[3]; }
+					else { AlarmL = AdjustedConfigs[3]; }
 					if (AdjustedConfigs[4] == "") { AlarmH = "440"; }
-					else { LRV = AdjustedConfigs[4]; }
+					else { AlarmH = AdjustedConfigs[4]; }
 
 					sqlQuery = String.Concat(@"INSERT INTO Instrument ([Tag], [InstrumentType], [AreaCode], [DAU_id], [Manufacturer_id], [LRV], [URV], [AlarmL], [AlarmH])
 						VALUES ('" + Tag + "','" + InstrumentType + "','" + AreaCode + "','" + DAU_id + "','" + Manufacturer_id + "','" + LRV + "','" + URV + "','" + AlarmL + "','" + AlarmH + "')");
